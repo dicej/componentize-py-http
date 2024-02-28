@@ -1,0 +1,17 @@
+*.wasm
+__pycache__
+gen
+venv
+target
+node_modules
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
