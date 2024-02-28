@@ -7,11 +7,13 @@ use wasmtime::{
     Config, Engine, Store, WasmBacktraceDetails,
 };
 use wasmtime_wasi::preview2::{self, ResourceTable, WasiCtx, WasiCtxBuilder, WasiView};
-use wasmtime_wasi_http::{self,
-    // bindings::http::types as http_types, body::HyperOutgoingBody, hyper_response_error,
-    WasiHttpCtx, WasiHttpView,
-};
 use wasmtime_wasi_http::proxy;
+use wasmtime_wasi_http::{
+    self,
+    // bindings::http::types as http_types, body::HyperOutgoingBody, hyper_response_error,
+    WasiHttpCtx,
+    WasiHttpView,
+};
 
 wasmtime::component::bindgen!({
     world: "hello-http",
@@ -33,7 +35,7 @@ wasmtime::component::bindgen!({
     },
 });
 
-#[async_std::main]
+#[tokio::main]
 async fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
     let world = &args[1];
@@ -85,10 +87,10 @@ async fn main() -> Result<()> {
     preview2::command::add_to_linker(&mut linker)?;
     proxy::add_only_http_to_linker(&mut linker)?;
 
-    let host = CommandCtx{
+    let host = CommandCtx {
         table: table,
         wasi: wasi,
-        http: WasiHttpCtx{},
+        http: WasiHttpCtx {},
     };
     let mut store = Store::new(&engine, host);
 
